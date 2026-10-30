@@ -20,7 +20,7 @@ I enjoy working through the entire analytical process—from understanding a pro
 
 ## Featured Projects
 
-### 1. [HR Workforce Analytics](sql-projects/hr-workforce-analytics/README.md)
+### 1. [HR Workforce Analytics](01-HR-Workforce-Analytics/README.md)
 **SQL Server**
 
 Analyzed employee data to explore workforce composition, employee tenure, departmental differences, and hiring trends.
