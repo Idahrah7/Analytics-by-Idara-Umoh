@@ -1,17 +1,3 @@
-/*
-HR Workforce Analytics — 01 Data Cleaning
-Microsoft SQL Server (T-SQL)
-
-Source: imported [HR Data] table, based on HR Data(2).csv.
-No raw employee-level records are published with this script.
-Reference date: 2026-10-30 (fixed for reproducible status and age).
-This script creates a view; it does not alter or overwrite the source table.
-
-Date caveat: the source mixes slash/hyphen US-style dates and
-two-digit years. Confirm the source date convention and SQL Server's
-two-digit-year cutoff before treating ambiguous dates as definitive.
-*/
-
 -- 1. Inspect source records and check for duplicate employee IDs.
 SELECT COUNT(*) AS total_records,
        COUNT(DISTINCT id) AS distinct_employee_ids
@@ -22,7 +8,7 @@ FROM [HR Data]
 GROUP BY id
 HAVING COUNT(*) > 1;
 
--- 2. Build a reusable cleaned view without publishing personal names.
+-- 2. Create the cleaned HR data view.
 -- Date conversions use US month/day/year formats for birth/hire dates;
 -- termination timestamps begin with ISO yyyy-mm-dd.
 GO
