@@ -45,10 +45,8 @@ Developed a Power BI report exploring customer segments and patterns in customer
 
 Analyzed 177 survey responses to investigate emergency healthcare challenges, patient preferences, and interest in a proposed hospital-matching platform. The findings contributed to product research and planning.
 
-## Upcoming Project
-
-### Financial Risk & Loan Portfolio Analysis
-**SQL · Power BI**
+### 6. Financial Risk & Loan Portfolio Analysis
+**SQL · Power BI · Planned**
 
 Planned analysis of publicly available lending data to investigate repayment behaviour, delinquency, default rates, and financial risk across borrower segments.
 
