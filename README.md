@@ -1,43 +1,65 @@
 # Analytics by Idara Umoh
 
-### Data Analytics Portfolio | Excel • SQL • Power BI
+**Data Analyst | Excel • SQL • Power BI**
 
-Hi, I'm **Idara Umoh**, a Civil Engineering undergraduate interested in using data to understand problems, identify trends, and communicate useful insights.
+## About Me
 
-This portfolio highlights selected work in **data cleaning, exploratory analysis, business reporting, and visualization**. My current focus is data analytics; as I develop new skills, I plan to expand the portfolio with additional technical projects.
+Hi, I'm **Idara Umoh**, a data analyst focused on transforming data into meaningful insights that support better decisions.
 
-## Featured projects
+I use **Excel, SQL, and Power BI** for data cleaning, transformation, exploratory analysis, and visualization. My projects explore business challenges across workforce management, customer retention, sales performance, and healthcare research.
 
-| Project | Tools | Focus | Status |
-| --- | --- | --- | --- |
-| [HR Workforce Analytics](sql-projects/hr-workforce-analytics/README.md) | SQL Server | Data cleaning, employee turnover, tenure, workforce trends | Documentation in progress |
-| [Bike Sales Analysis](https://github.com/Idahrah7/M4ace-Data-analysis/blob/main/Bike_Sales_Project_IdaraUmoh.xlsx) | Excel | Sales analysis workbook | Under review for portfolio |
-| [Customer Segmentation](https://github.com/Idahrah7/M4ace-Data-analysis/blob/main/Customer_Segmetation_Project_IdaraUmoh.pbix) | Power BI | Customer segmentation report | Under review for portfolio |
+I enjoy working through the entire analytical process—from understanding a problem and preparing data to identifying patterns, building dashboards, and communicating actionable findings.
 
-> Projects marked **under review** link to my learning archive. I will publish polished versions here after validating the work and documenting findings.
+## Technical Skills
 
-## Tools and skills
+| Tool | Skills |
+| --- | --- |
+| **Excel** | Power Query, PivotTables, PivotCharts, dashboards, forecasting, lookup functions |
+| **SQL** | Data cleaning, joins, CTEs, window functions, aggregations |
+| **Power BI** | Data modelling, interactive dashboards, visualization, reporting |
 
-- **Excel:** Power Query, PivotTables, formulas, data cleaning, analysis and visualization
-- **SQL:** joins, common table expressions (CTEs), window functions, aggregation, data preparation
-- **Power BI:** dashboard development and visual reporting
+## Featured Projects
 
-## Professional learning
+### 1. [HR Workforce Analytics](sql-projects/hr-workforce-analytics/README.md)
+**SQL Server**
 
-Completed DataCamp skill tracks:
-- [Excel Fundamentals](https://app.datacamp.com/learn/skill-tracks/excel-fundamentals)
-- [Data Analysis with Excel Power Tools](https://app.datacamp.com/learn/skill-tracks/data-analysis-with-excel-power-tools)
+Analyzed employee data to explore workforce composition, employee tenure, departmental differences, and hiring trends.
 
-*Completion is self-reported; credential verification links can be added when available.*
+### 2. Customer Churn & Retention Analysis
+**Excel**
 
-## About this portfolio
+Investigated customer churn patterns through PivotTables and visualizations to understand customer retention challenges.
 
-My projects aim to answer practical questions, explain analytical methods, and present findings clearly. Each polished project will include its objective, approach, results, limitations, and relevant visuals.
+### 3. Sales & Profitability Dashboard
+**Excel**
 
-## Connect
+Explored sales performance, regional profitability, and business trends through dashboard reporting.
 
-- [GitHub profile](https://github.com/Idahrah7)
-- [Learning archive](https://github.com/Idahrah7/M4ace-Data-analysis)
+### 4. [Customer Segmentation Analysis](https://github.com/Idahrah7/M4ace-Data-analysis/blob/main/Customer_Segmetation_Project_IdaraUmoh.pbix)
+**Power BI**
 
----
-*Portfolio in development. Additional Excel and Power BI case studies are being reviewed for publication.*
+Developed a Power BI report exploring customer segments and patterns in customer data.
+
+### 5. Healthcare Survey & Product Insights — Ceeravo
+**Excel · Survey Research · Data Visualization**
+
+Analyzed 177 survey responses to investigate emergency healthcare challenges, patient preferences, and interest in a proposed hospital-matching platform. The findings contributed to product research and planning.
+
+## Upcoming Project
+
+### Financial Risk & Loan Portfolio Analysis
+**SQL · Power BI**
+
+Planned analysis of publicly available lending data to investigate repayment behaviour, delinquency, default rates, and financial risk across borrower segments.
+
+## Professional Training
+
+**Data Analysis — Six-Month Tech-Mentorship Program**
+
+M4ACE Initiative | Completed September 2026
+
+## Connect With Me
+
+- [GitHub Profile](https://github.com/Idahrah7)
+
+LinkedIn and professional email can be added later.
