@@ -14,9 +14,9 @@ I enjoy working through the entire analytical process—from understanding a pro
 
 | Tool | Skills |
 | --- | --- |
-| **Excel** | Power Query, PivotTables, PivotCharts, dashboards, forecasting, lookup functions |
-| **SQL** | Data cleaning, joins, CTEs, window functions, aggregations |
-| **Power BI** | Data modelling, interactive dashboards, visualization, reporting |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/microsoftexcel/microsoftexcel-original.svg" alt="Microsoft Excel" width="24" height="24" /> **Excel** | Power Query, PivotTables, PivotCharts, dashboards, forecasting, lookup functions |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/microsoftsqlserver/microsoftsqlserver-plain.svg" alt="Microsoft SQL Server" width="24" height="24" /> **SQL Server** | Data cleaning, joins, CTEs, window functions, aggregations |
+| <img src="https://cdn.simpleicons.org/powerbi/F2C811" alt="Power BI" width="24" height="24" /> **Power BI** | Data modelling, interactive dashboards, visualization, reporting |
 
 ## Featured Projects
 
