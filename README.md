@@ -59,5 +59,5 @@ M4ACE Initiative | Completed September 2026
 ## Connect With Me
 
 - [GitHub Profile](https://github.com/Idahrah7)
-
-LinkedIn and professional email can be added later.
+- [LinkedIn](https://www.linkedin.com/in/idara-umoh-645352387/)
+- [Email](mailto:idaraumoh2005@gmail.com)
