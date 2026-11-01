@@ -1,170 +1,124 @@
--- 1. Inspect source records and check for duplicate employee IDs.
-SELECT COUNT(*) AS total_records,
-       COUNT(DISTINCT id) AS distinct_employee_ids
-FROM [HR Data];
+-- 1. Inspect the original HR data
+SELECT * FROM [HR Data];
 
-SELECT id, COUNT(*) AS occurrences
+SELECT id, COUNT(*) AS Duplicate_Count
 FROM [HR Data]
 GROUP BY id
 HAVING COUNT(*) > 1;
 
--- 2. Create the cleaned HR data view
+
+-- 2. Clean termination dates in the original table
+IF COL_LENGTH('dbo.HR Data', 'termdate_clean') IS NULL
+    ALTER TABLE [HR Data] ADD termdate_clean DATE;
 GO
-CREATE OR ALTER VIEW dbo.vw_HR_Workforce_Cleaned
-AS
-WITH SourceData AS (
-    SELECT
-        id,
-        gender,
-        race,
-        department,
-        jobtitle,
-        location,
-        location_city,
-        location_state,
-        NULLIF(LTRIM(RTRIM(
-            CONVERT(varchar(50), birthdate)
-        )), '') AS raw_birth_date,
-        NULLIF(LTRIM(RTRIM(
-            CONVERT(varchar(50), hire_date)
-        )), '') AS raw_hire_date,
-        NULLIF(LTRIM(RTRIM(
-            CONVERT(varchar(50), termdate)
-        )), '') AS raw_term_date
-    FROM [HR Data]
-),
-ParsedDates AS (
-    SELECT
-        *,
-        COALESCE(
-            TRY_CONVERT(date, raw_birth_date, 101),
-            TRY_CONVERT(date, raw_birth_date, 110)
-        ) AS birth_date,
-        COALESCE(
-            TRY_CONVERT(date, raw_hire_date, 101),
-            TRY_CONVERT(date, raw_hire_date, 110)
-        ) AS hire_date_clean,
-        TRY_CONVERT(
-            date,
-            LEFT(raw_term_date, 10),
-            23
-        ) AS termination_date
-    FROM SourceData
-),
-Classified AS (
-    SELECT
-        *,
-        CAST('2026-10-30' AS date) AS as_of_date,
-        CASE
-            WHEN raw_term_date IS NULL
-                THEN 'Active'
-            WHEN termination_date IS NULL
-                THEN 'Unknown'
-            WHEN termination_date > CAST('2026-10-30' AS date)
-                THEN 'Pending Termination'
-            ELSE 'Terminated'
-        END AS employee_status
-    FROM ParsedDates
+
+UPDATE [HR Data]
+SET termdate_clean = TRY_CONVERT(DATE, LEFT(NULLIF(LTRIM(RTRIM(termdate)), ''), 10), 120);
+
+
+-- 3. Calculate employee ages using today's date
+IF COL_LENGTH('dbo.HR Data', 'age') IS NULL
+    ALTER TABLE [HR Data] ADD age INT;
+GO
+
+UPDATE [HR Data]
+SET age =
+    CASE
+        WHEN TRY_CONVERT(DATE, birthdate) IS NULL
+          OR TRY_CONVERT(DATE, birthdate) > CAST(GETDATE() AS DATE)
+        THEN NULL
+        ELSE
+            DATEDIFF(YEAR, TRY_CONVERT(DATE, birthdate), GETDATE())
+            - CASE
+                WHEN DATEADD(
+                    YEAR,
+                    DATEDIFF(YEAR, TRY_CONVERT(DATE, birthdate), GETDATE()),
+                    TRY_CONVERT(DATE, birthdate)
+                ) > GETDATE()
+                THEN 1 ELSE 0
+              END
+    END;
+
+
+-- 4. Classify employees based on termination dates
+IF COL_LENGTH('dbo.HR Data', 'Employee Status') IS NULL
+    ALTER TABLE [HR Data] ADD [Employee Status] VARCHAR(20);
+GO
+
+UPDATE [HR Data]
+SET [Employee Status] =
+    CASE
+        WHEN NULLIF(LTRIM(RTRIM(termdate)), '') IS NULL THEN 'Active'
+        WHEN termdate_clean IS NULL THEN 'Unknown'
+        WHEN termdate_clean > CAST(GETDATE() AS DATE) THEN 'Pending Termination'
+        ELSE 'Terminated'
+    END;
+
+
+-- 5. Create the cleaned HR table with the original column names
+-- This table is a derived copy of [HR Data].
+IF OBJECT_ID('dbo.[Cleaned HR Data]', 'U') IS NULL
+BEGIN
+    SELECT TOP (0)
+        id AS ID,
+        first_name AS [First Name],
+        last_name AS [Last Name],
+        TRY_CONVERT(DATE, birthdate) AS [Birth Date],
+        gender AS Gender,
+        race AS Race,
+        department AS Department,
+        jobtitle AS [Job Title],
+        TRY_CONVERT(DATE, hire_date) AS [Hire Date],
+        location AS Location,
+        termdate_clean AS [Termination Date],
+        age AS Age,
+        [Employee Status]
+    INTO [Cleaned HR Data]
+    FROM [HR Data];
+END;
+GO
+
+-- Refresh only the derived columns/rows in the cleaned copy.
+-- Run this after the source-table cleaning steps above.
+DELETE FROM [Cleaned HR Data];
+
+INSERT INTO [Cleaned HR Data] (
+    ID, [First Name], [Last Name], [Birth Date],
+    Gender, Race, Department, [Job Title],
+    [Hire Date], Location, [Termination Date], Age, [Employee Status]
 )
 SELECT
     id,
+    first_name,
+    last_name,
+    TRY_CONVERT(DATE, birthdate),
     gender,
     race,
     department,
     jobtitle,
+    TRY_CONVERT(DATE, hire_date),
     location,
-    location_city,
-    location_state,
-    birth_date,
-    hire_date_clean,
-    termination_date,
-    employee_status,
-    CASE
-        WHEN birth_date IS NULL
-          OR birth_date > as_of_date
-            THEN NULL
-        ELSE
-            DATEDIFF(YEAR, birth_date, as_of_date)
-            -
-            CASE
-                WHEN DATEADD(
-                    YEAR,
-                    DATEDIFF(YEAR, birth_date, as_of_date),
-                    birth_date
-                ) > as_of_date
-                THEN 1 ELSE 0
-            END
-    END AS age,
-    as_of_date
-FROM Classified;
-GO
+    termdate_clean,
+    age,
+    [Employee Status]
+FROM [HR Data];
 
--- 3. Check conversion quality before trusting downstream calculations.
+
+-- 6. Check the cleaned table
+SELECT COUNT(*) AS [Total Employees]
+FROM [Cleaned HR Data];
+
+SELECT [Employee Status], COUNT(*) AS [Employee Count]
+FROM [Cleaned HR Data]
+GROUP BY [Employee Status]
+ORDER BY [Employee Count] DESC;
+
+SELECT MIN(Age) AS youngest, MAX(Age) AS oldest
+FROM [Cleaned HR Data];
+
 SELECT
-    COUNT(*) AS total_records,
-    SUM(CASE WHEN birth_date IS NULL THEN 1 ELSE 0 END) AS missing_or_invalid_birth_dates,
-    SUM(CASE WHEN hire_date_clean IS NULL THEN 1 ELSE 0 END) AS missing_or_invalid_hire_dates,
-    SUM(CASE WHEN termination_date IS NOT NULL THEN 1 ELSE 0 END) AS parsed_termination_dates
-FROM dbo.vw_HR_Workforce_Cleaned;
-
--- 4. Check the employee-status split on the documented reference date.
-SELECT employee_status, COUNT(*) AS employee_count
-FROM dbo.vw_HR_Workforce_Cleaned
-GROUP BY employee_status
-ORDER BY employee_count DESC;
-
--- 5. Check the age range for implausible values.
-SELECT MIN(age) AS youngest_age, MAX(age) AS oldest_age
-FROM dbo.vw_HR_Workforce_Cleaned;
-
--- 6. Check missing values in key employee fields
-SELECT
-    COUNT(*) AS [Total Records],
-    SUM(CASE WHEN id IS NULL THEN 1 ELSE 0 END) AS [Missing Employee IDs],
-    SUM(CASE WHEN gender IS NULL OR LTRIM(RTRIM(gender)) = '' THEN 1 ELSE 0 END) AS [Missing Gender],
-    SUM(CASE WHEN race IS NULL OR LTRIM(RTRIM(race)) = '' THEN 1 ELSE 0 END) AS [Missing Race],
-    SUM(CASE WHEN department IS NULL OR LTRIM(RTRIM(department)) = '' THEN 1 ELSE 0 END) AS [Missing Department],
-    SUM(CASE WHEN jobtitle IS NULL OR LTRIM(RTRIM(jobtitle)) = '' THEN 1 ELSE 0 END) AS [Missing Job Title],
-    SUM(CASE WHEN location IS NULL OR LTRIM(RTRIM(location)) = '' THEN 1 ELSE 0 END) AS [Missing Location],
-    SUM(CASE WHEN birth_date IS NULL THEN 1 ELSE 0 END) AS [Missing or Invalid Birth Dates],
-    SUM(CASE WHEN hire_date_clean IS NULL THEN 1 ELSE 0 END) AS [Missing or Invalid Hire Dates]
-FROM dbo.vw_HR_Workforce_Cleaned;
-
--- 7. Identify unusual employee ages
-SELECT
-    id AS [Employee ID],
-    age AS [Age],
-    department AS [Department],
-    employee_status AS [Employee Status]
-FROM dbo.vw_HR_Workforce_Cleaned
-WHERE age < 18 OR age > 75
-ORDER BY age;
-
--- 8. Check inconsistent employment dates
-SELECT
-    id AS [Employee ID],
-    birth_date AS [Birth Date],
-    hire_date_clean AS [Hire Date],
-    termination_date AS [Termination Date],
-    employee_status AS [Employee Status]
-FROM dbo.vw_HR_Workforce_Cleaned
-WHERE hire_date_clean < birth_date
-   OR hire_date_clean > as_of_date
-   OR termination_date < hire_date_clean
-   OR birth_date > as_of_date;
-
--- 9. Check consistency of department and location labels
-SELECT
-    'Department' AS [Field],
-    department AS [Value],
-    COUNT(*) AS [Employee Count]
-FROM dbo.vw_HR_Workforce_Cleaned
-GROUP BY department
-UNION ALL
-SELECT
-    'Location' AS [Field],
-    location AS [Value],
-    COUNT(*) AS [Employee Count]
-FROM dbo.vw_HR_Workforce_Cleaned
-GROUP BY location
-ORDER BY [Field], [Employee Count] DESC;
+    SUM(CASE WHEN [Birth Date] > CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END)
+        AS [Future Birth Dates],
+    SUM(CASE WHEN [Hire Date] < [Birth Date] THEN 1 ELSE 0 END)
+        AS [Hired Before Birth]
+FROM [Cleaned HR Data];
