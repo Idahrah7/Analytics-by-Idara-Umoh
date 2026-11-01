@@ -245,7 +245,10 @@ WITH DepartureAge AS (
     FROM dbo.vw_HR_Workforce_Cleaned
     WHERE employee_status = 'Terminated'
       AND birth_date IS NOT NULL
+      AND termination_date IS NOT NULL
+      AND birth_date <= as_of_date
       AND termination_date >= birth_date
+      AND termination_date <= as_of_date
 )
 SELECT
     department AS [Department],
@@ -278,7 +281,10 @@ WITH DepartureAge AS (
     FROM dbo.vw_HR_Workforce_Cleaned
     WHERE employee_status = 'Terminated'
       AND birth_date IS NOT NULL
+      AND termination_date IS NOT NULL
+      AND birth_date <= as_of_date
       AND termination_date >= birth_date
+      AND termination_date <= as_of_date
 ),
 AgeGroups AS (
     SELECT
