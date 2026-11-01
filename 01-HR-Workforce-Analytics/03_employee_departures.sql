@@ -5,23 +5,23 @@ WITH DepartmentSummary AS (
         COUNT(*) AS [Total Employees],
         SUM(
             CASE
-                WHEN employee_status IN ('Active', 'Pending Termination')
+                WHEN [Employee Status] IN ('Active', 'Pending Termination')
                 THEN 1 ELSE 0
             END
         ) AS [Current Employees],
         SUM(
             CASE
-                WHEN employee_status = 'Pending Termination'
+                WHEN [Employee Status] = 'Pending Termination'
                 THEN 1 ELSE 0
             END
         ) AS [On Notice],
         SUM(
             CASE
-                WHEN employee_status = 'Terminated'
+                WHEN [Employee Status] = 'Terminated'
                 THEN 1 ELSE 0
             END
         ) AS [Former Employees]
-    FROM dbo.vw_HR_Workforce_Cleaned
+    FROM [Cleaned HR Data]
     GROUP BY department
 )
 SELECT
@@ -41,23 +41,23 @@ WITH DepartmentSummary AS (
         COUNT(*) AS [Total Employees],
         SUM(
             CASE
-                WHEN employee_status IN ('Active', 'Pending Termination')
+                WHEN [Employee Status] IN ('Active', 'Pending Termination')
                 THEN 1 ELSE 0
             END
         ) AS [Current Employees],
         SUM(
             CASE
-                WHEN employee_status = 'Pending Termination'
+                WHEN [Employee Status] = 'Pending Termination'
                 THEN 1 ELSE 0
             END
         ) AS [On Notice],
         SUM(
             CASE
-                WHEN employee_status = 'Terminated'
+                WHEN [Employee Status] = 'Terminated'
                 THEN 1 ELSE 0
             END
         ) AS [Former Employees]
-    FROM dbo.vw_HR_Workforce_Cleaned
+    FROM [Cleaned HR Data]
     GROUP BY department
 )
 SELECT
@@ -81,17 +81,17 @@ SELECT
         AVG(
             DATEDIFF(
                 DAY,
-                hire_date_clean,
-                termination_date
+                [Hire Date],
+                [Termination Date]
             ) * 1.0
         ) / 365.25
         AS DECIMAL(10,2)
     ) AS [Average Tenure (Years)]
-FROM dbo.vw_HR_Workforce_Cleaned
-WHERE employee_status = 'Terminated'
-  AND hire_date_clean IS NOT NULL
-  AND termination_date IS NOT NULL
-  AND termination_date >= hire_date_clean;
+FROM [Cleaned HR Data]
+WHERE [Employee Status] = 'Terminated'
+  AND [Hire Date] IS NOT NULL
+  AND [Termination Date] IS NOT NULL
+  AND [Termination Date] >= [Hire Date];
 
 
 -- 4. Average tenure of former employees by department
@@ -102,37 +102,37 @@ SELECT
         AVG(
             DATEDIFF(
                 DAY,
-                hire_date_clean,
-                termination_date
+                [Hire Date],
+                [Termination Date]
             ) * 1.0
         ) / 365.25
         AS DECIMAL(10,2)
     ) AS [Average Tenure (Years)]
-FROM dbo.vw_HR_Workforce_Cleaned
-WHERE employee_status = 'Terminated'
-  AND hire_date_clean IS NOT NULL
-  AND termination_date IS NOT NULL
-  AND termination_date >= hire_date_clean
+FROM [Cleaned HR Data]
+WHERE [Employee Status] = 'Terminated'
+  AND [Hire Date] IS NOT NULL
+  AND [Termination Date] IS NOT NULL
+  AND [Termination Date] >= [Hire Date]
 GROUP BY department
 ORDER BY [Average Tenure (Years)] DESC;
 
 -- 5. Average, shortest and longest tenure by department
 SELECT department AS [Department], COUNT(*) AS [Former Employees],
- CAST(AVG(DATEDIFF(DAY, hire_date_clean, termination_date) * 1.0) / 365.25 AS DECIMAL(10,2)) AS [Average Tenure (Years)],
- CAST(MIN(DATEDIFF(DAY, hire_date_clean, termination_date) * 1.0) / 365.25 AS DECIMAL(10,2)) AS [Shortest Tenure (Years)],
- CAST(MAX(DATEDIFF(DAY, hire_date_clean, termination_date) * 1.0) / 365.25 AS DECIMAL(10,2)) AS [Longest Tenure (Years)]
-FROM dbo.vw_HR_Workforce_Cleaned
-WHERE employee_status = 'Terminated'
- AND hire_date_clean IS NOT NULL AND termination_date >= hire_date_clean
+ CAST(AVG(DATEDIFF(DAY, [Hire Date], [Termination Date]) * 1.0) / 365.25 AS DECIMAL(10,2)) AS [Average Tenure (Years)],
+ CAST(MIN(DATEDIFF(DAY, [Hire Date], [Termination Date]) * 1.0) / 365.25 AS DECIMAL(10,2)) AS [Shortest Tenure (Years)],
+ CAST(MAX(DATEDIFF(DAY, [Hire Date], [Termination Date]) * 1.0) / 365.25 AS DECIMAL(10,2)) AS [Longest Tenure (Years)]
+FROM [Cleaned HR Data]
+WHERE [Employee Status] = 'Terminated'
+ AND [Hire Date] IS NOT NULL AND [Termination Date] >= [Hire Date]
 GROUP BY department
 ORDER BY [Average Tenure (Years)] DESC;
 
 -- 6. Tenure groups of former employees
 WITH Tenure AS (
- SELECT DATEDIFF(DAY, hire_date_clean, termination_date) / 365.25 AS tenure_years
- FROM dbo.vw_HR_Workforce_Cleaned
- WHERE employee_status = 'Terminated'
- AND hire_date_clean IS NOT NULL AND termination_date >= hire_date_clean
+ SELECT DATEDIFF(DAY, [Hire Date], [Termination Date]) / 365.25 AS tenure_years
+ FROM [Cleaned HR Data]
+ WHERE [Employee Status] = 'Terminated'
+ AND [Hire Date] IS NOT NULL AND [Termination Date] >= [Hire Date]
 ),
 TenureGroups AS (
  SELECT CASE WHEN tenure_years < 3 THEN '0-2 Years'
@@ -153,26 +153,26 @@ ORDER BY CASE [Tenure Group]
 -- 7. Former employees by location
 SELECT location AS [Location], COUNT(*) AS [Former Employees],
  CAST(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER () AS DECIMAL(5,2)) AS [Percentage (%)]
-FROM dbo.vw_HR_Workforce_Cleaned
-WHERE employee_status = 'Terminated'
+FROM [Cleaned HR Data]
+WHERE [Employee Status] = 'Terminated'
 GROUP BY location
 ORDER BY [Former Employees] DESC;
 
 -- 8. Employees pending termination by location
 SELECT location AS [Location], COUNT(*) AS [On Notice Employees],
  CAST(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER () AS DECIMAL(5,2)) AS [Percentage (%)]
-FROM dbo.vw_HR_Workforce_Cleaned
-WHERE employee_status = 'Pending Termination'
+FROM [Cleaned HR Data]
+WHERE [Employee Status] = 'Pending Termination'
 GROUP BY location
 ORDER BY [On Notice Employees] DESC;
 
 -- 9. Former employee proportion by location
 SELECT location AS [Location], COUNT(*) AS [Total Employees],
- SUM(CASE WHEN employee_status = 'Terminated' THEN 1 ELSE 0 END) AS [Former Employees],
- SUM(CASE WHEN employee_status IN ('Active', 'Pending Termination') THEN 1 ELSE 0 END) AS [Current Employees],
- CAST(SUM(CASE WHEN employee_status = 'Terminated' THEN 1 ELSE 0 END) * 100.0 /
+ SUM(CASE WHEN [Employee Status] = 'Terminated' THEN 1 ELSE 0 END) AS [Former Employees],
+ SUM(CASE WHEN [Employee Status] IN ('Active', 'Pending Termination') THEN 1 ELSE 0 END) AS [Current Employees],
+ CAST(SUM(CASE WHEN [Employee Status] = 'Terminated' THEN 1 ELSE 0 END) * 100.0 /
  NULLIF(COUNT(*), 0) AS DECIMAL(5,2)) AS [Former Employee Percentage]
-FROM dbo.vw_HR_Workforce_Cleaned
+FROM [Cleaned HR Data]
 GROUP BY location
 ORDER BY [Former Employee Percentage] DESC;
 
@@ -185,8 +185,8 @@ SELECT location AS [Location],
  NULLIF(COUNT(*), 0) AS DECIMAL(5,2)) AS [Male (%)],
  CAST(SUM(CASE WHEN gender = 'Female' THEN 1 ELSE 0 END) * 100.0 /
  NULLIF(COUNT(*), 0) AS DECIMAL(5,2)) AS [Female (%)]
-FROM dbo.vw_HR_Workforce_Cleaned
-WHERE employee_status = 'Terminated'
+FROM [Cleaned HR Data]
+WHERE [Employee Status] = 'Terminated'
 GROUP BY location
 ORDER BY location;
 
@@ -196,14 +196,14 @@ WITH DepartmentSummary AS (
         department AS [Department],
         COUNT(*) AS [Total Employees],
         SUM(CASE
-            WHEN employee_status IN ('Active', 'Pending Termination')
+            WHEN [Employee Status] IN ('Active', 'Pending Termination')
             THEN 1 ELSE 0
         END) AS [Current Employees],
         SUM(CASE
-            WHEN employee_status = 'Terminated'
+            WHEN [Employee Status] = 'Terminated'
             THEN 1 ELSE 0
         END) AS [Former Employees]
-    FROM dbo.vw_HR_Workforce_Cleaned
+    FROM [Cleaned HR Data]
     GROUP BY department
 )
 SELECT
@@ -230,25 +230,25 @@ WITH DepartureAge AS (
     SELECT
         id,
         department,
-        birth_date,
-        termination_date,
-        DATEDIFF(YEAR, birth_date, termination_date)
+        [Birth Date],
+        [Termination Date],
+        DATEDIFF(YEAR, [Birth Date], [Termination Date])
         -
         CASE
             WHEN DATEADD(
                 YEAR,
-                DATEDIFF(YEAR, birth_date, termination_date),
-                birth_date
-            ) > termination_date
+                DATEDIFF(YEAR, [Birth Date], [Termination Date]),
+                [Birth Date]
+            ) > [Termination Date]
             THEN 1 ELSE 0
         END AS age_at_departure
-    FROM dbo.vw_HR_Workforce_Cleaned
-    WHERE employee_status = 'Terminated'
-      AND birth_date IS NOT NULL
-      AND termination_date IS NOT NULL
-      AND birth_date <= as_of_date
-      AND termination_date >= birth_date
-      AND termination_date <= as_of_date
+    FROM [Cleaned HR Data]
+    WHERE [Employee Status] = 'Terminated'
+      AND [Birth Date] IS NOT NULL
+      AND [Termination Date] IS NOT NULL
+      AND [Birth Date] <= CAST(GETDATE() AS DATE)
+      AND [Termination Date] >= [Birth Date]
+      AND [Termination Date] <= CAST(GETDATE() AS DATE)
 )
 SELECT
     department AS [Department],
@@ -268,23 +268,23 @@ ORDER BY [Average Age at Departure] DESC;
 -- 13. Departures by age group
 WITH DepartureAge AS (
     SELECT
-        DATEDIFF(YEAR, birth_date, termination_date)
+        DATEDIFF(YEAR, [Birth Date], [Termination Date])
         -
         CASE
             WHEN DATEADD(
                 YEAR,
-                DATEDIFF(YEAR, birth_date, termination_date),
-                birth_date
-            ) > termination_date
+                DATEDIFF(YEAR, [Birth Date], [Termination Date]),
+                [Birth Date]
+            ) > [Termination Date]
             THEN 1 ELSE 0
         END AS age_at_departure
-    FROM dbo.vw_HR_Workforce_Cleaned
-    WHERE employee_status = 'Terminated'
-      AND birth_date IS NOT NULL
-      AND termination_date IS NOT NULL
-      AND birth_date <= as_of_date
-      AND termination_date >= birth_date
-      AND termination_date <= as_of_date
+    FROM [Cleaned HR Data]
+    WHERE [Employee Status] = 'Terminated'
+      AND [Birth Date] IS NOT NULL
+      AND [Termination Date] IS NOT NULL
+      AND [Birth Date] <= CAST(GETDATE() AS DATE)
+      AND [Termination Date] >= [Birth Date]
+      AND [Termination Date] <= CAST(GETDATE() AS DATE)
 ),
 AgeGroups AS (
     SELECT

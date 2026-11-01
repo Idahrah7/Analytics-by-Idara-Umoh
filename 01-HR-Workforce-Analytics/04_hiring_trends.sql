@@ -1,46 +1,46 @@
 -- 1. Annual hiring trends
 SELECT
-    YEAR(hire_date_clean) AS [Year],
+    YEAR([Hire Date]) AS [Year],
     COUNT(*) AS [Employees Hired]
-FROM dbo.vw_HR_Workforce_Cleaned
-WHERE hire_date_clean IS NOT NULL
-  AND hire_date_clean <= as_of_date
-GROUP BY YEAR(hire_date_clean)
+FROM [Cleaned HR Data]
+WHERE [Hire Date] IS NOT NULL
+  AND [Hire Date] <= CAST(GETDATE() AS DATE)
+GROUP BY YEAR([Hire Date])
 ORDER BY [Year];
 
 
 -- 2. Annual employee terminations
 SELECT
-    YEAR(termination_date) AS [Year],
+    YEAR([Termination Date]) AS [Year],
     COUNT(*) AS [Employees Terminated]
-FROM dbo.vw_HR_Workforce_Cleaned
-WHERE termination_date IS NOT NULL
-  AND employee_status = 'Terminated'
-GROUP BY YEAR(termination_date)
+FROM [Cleaned HR Data]
+WHERE [Termination Date] IS NOT NULL
+  AND [Employee Status] = 'Terminated'
+GROUP BY YEAR([Termination Date])
 ORDER BY [Year];
 
 
 -- 3. Annual hiring versus terminations
 WITH WorkforceChanges AS (
     SELECT
-        YEAR(hire_date_clean) AS [Year],
+        YEAR([Hire Date]) AS [Year],
         COUNT(*) AS [Employees Hired],
         0 AS [Employees Terminated]
-    FROM dbo.vw_HR_Workforce_Cleaned
-    WHERE hire_date_clean IS NOT NULL
-  AND hire_date_clean <= as_of_date
-    GROUP BY YEAR(hire_date_clean)
+    FROM [Cleaned HR Data]
+    WHERE [Hire Date] IS NOT NULL
+  AND [Hire Date] <= CAST(GETDATE() AS DATE)
+    GROUP BY YEAR([Hire Date])
 
     UNION ALL
 
     SELECT
-        YEAR(termination_date) AS [Year],
+        YEAR([Termination Date]) AS [Year],
         0 AS [Employees Hired],
         COUNT(*) AS [Employees Terminated]
-    FROM dbo.vw_HR_Workforce_Cleaned
-    WHERE termination_date IS NOT NULL
-      AND employee_status = 'Terminated'
-    GROUP BY YEAR(termination_date)
+    FROM [Cleaned HR Data]
+    WHERE [Termination Date] IS NOT NULL
+      AND [Employee Status] = 'Terminated'
+    GROUP BY YEAR([Termination Date])
 )
 SELECT
     [Year],
@@ -56,24 +56,24 @@ ORDER BY [Year];
 -- 4. Cumulative workforce growth
 WITH WorkforceChanges AS (
     SELECT
-        YEAR(hire_date_clean) AS [Year],
+        YEAR([Hire Date]) AS [Year],
         COUNT(*) AS [Employees Hired],
         0 AS [Employees Terminated]
-    FROM dbo.vw_HR_Workforce_Cleaned
-    WHERE hire_date_clean IS NOT NULL
-  AND hire_date_clean <= as_of_date
-    GROUP BY YEAR(hire_date_clean)
+    FROM [Cleaned HR Data]
+    WHERE [Hire Date] IS NOT NULL
+  AND [Hire Date] <= CAST(GETDATE() AS DATE)
+    GROUP BY YEAR([Hire Date])
 
     UNION ALL
 
     SELECT
-        YEAR(termination_date) AS [Year],
+        YEAR([Termination Date]) AS [Year],
         0 AS [Employees Hired],
         COUNT(*) AS [Employees Terminated]
-    FROM dbo.vw_HR_Workforce_Cleaned
-    WHERE termination_date IS NOT NULL
-      AND employee_status = 'Terminated'
-    GROUP BY YEAR(termination_date)
+    FROM [Cleaned HR Data]
+    WHERE [Termination Date] IS NOT NULL
+      AND [Employee Status] = 'Terminated'
+    GROUP BY YEAR([Termination Date])
 ),
 AnnualSummary AS (
     SELECT
@@ -102,23 +102,23 @@ ORDER BY [Year];
 WITH HiringAge AS (
     SELECT
         id,
-        hire_date_clean,
-        birth_date,
-        DATEDIFF(YEAR, birth_date, hire_date_clean)
+        [Hire Date],
+        [Birth Date],
+        DATEDIFF(YEAR, [Birth Date], [Hire Date])
         -
         CASE
             WHEN DATEADD(
                 YEAR,
-                DATEDIFF(YEAR, birth_date, hire_date_clean),
-                birth_date
-            ) > hire_date_clean
+                DATEDIFF(YEAR, [Birth Date], [Hire Date]),
+                [Birth Date]
+            ) > [Hire Date]
             THEN 1 ELSE 0
         END AS age_at_hire
-    FROM dbo.vw_HR_Workforce_Cleaned
-    WHERE birth_date IS NOT NULL
-      AND hire_date_clean IS NOT NULL
-      AND hire_date_clean >= birth_date
-      AND hire_date_clean <= as_of_date
+    FROM [Cleaned HR Data]
+    WHERE [Birth Date] IS NOT NULL
+      AND [Hire Date] IS NOT NULL
+      AND [Hire Date] >= [Birth Date]
+      AND [Hire Date] <= CAST(GETDATE() AS DATE)
 ),
 HiringAgeGroups AS (
     SELECT
@@ -146,14 +146,14 @@ ORDER BY [Employees Hired] DESC;
 
 -- 6. Annual hiring by department
 SELECT
-    YEAR(hire_date_clean) AS [Year],
+    YEAR([Hire Date]) AS [Year],
     department AS [Department],
     COUNT(*) AS [Employees Hired]
-FROM dbo.vw_HR_Workforce_Cleaned
-WHERE hire_date_clean IS NOT NULL
-  AND hire_date_clean <= as_of_date
+FROM [Cleaned HR Data]
+WHERE [Hire Date] IS NOT NULL
+  AND [Hire Date] <= CAST(GETDATE() AS DATE)
 GROUP BY
-    YEAR(hire_date_clean),
+    YEAR([Hire Date]),
     department
 ORDER BY
     [Year],
@@ -162,14 +162,14 @@ ORDER BY
 
 -- 7. Annual employee departures by department
 SELECT
-    YEAR(termination_date) AS [Year],
+    YEAR([Termination Date]) AS [Year],
     department AS [Department],
     COUNT(*) AS [Employees Terminated]
-FROM dbo.vw_HR_Workforce_Cleaned
-WHERE employee_status = 'Terminated'
-  AND termination_date IS NOT NULL
+FROM [Cleaned HR Data]
+WHERE [Employee Status] = 'Terminated'
+  AND [Termination Date] IS NOT NULL
 GROUP BY
-    YEAR(termination_date),
+    YEAR([Termination Date]),
     department
 ORDER BY
     [Year],
@@ -179,29 +179,29 @@ ORDER BY
 -- 8. Annual net workforce change by department
 WITH WorkforceChanges AS (
     SELECT
-        YEAR(hire_date_clean) AS [Year],
+        YEAR([Hire Date]) AS [Year],
         department AS [Department],
         COUNT(*) AS [Employees Hired],
         0 AS [Employees Terminated]
-    FROM dbo.vw_HR_Workforce_Cleaned
-    WHERE hire_date_clean IS NOT NULL
-      AND hire_date_clean <= as_of_date
+    FROM [Cleaned HR Data]
+    WHERE [Hire Date] IS NOT NULL
+      AND [Hire Date] <= CAST(GETDATE() AS DATE)
     GROUP BY
-        YEAR(hire_date_clean),
+        YEAR([Hire Date]),
         department
 
     UNION ALL
 
     SELECT
-        YEAR(termination_date) AS [Year],
+        YEAR([Termination Date]) AS [Year],
         department AS [Department],
         0 AS [Employees Hired],
         COUNT(*) AS [Employees Terminated]
-    FROM dbo.vw_HR_Workforce_Cleaned
-    WHERE employee_status = 'Terminated'
-      AND termination_date IS NOT NULL
+    FROM [Cleaned HR Data]
+    WHERE [Employee Status] = 'Terminated'
+      AND [Termination Date] IS NOT NULL
     GROUP BY
-        YEAR(termination_date),
+        YEAR([Termination Date]),
         department
 ),
 AnnualSummary AS (
