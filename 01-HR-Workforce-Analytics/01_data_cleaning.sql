@@ -8,13 +8,11 @@ FROM [HR Data]
 GROUP BY id
 HAVING COUNT(*) > 1;
 
--- 2. Create the cleaned HR data view.
--- Date conversions use US month/day/year formats for birth/hire dates;
--- termination timestamps begin with ISO yyyy-mm-dd.
+-- 2. Create the cleaned HR data view
 GO
 CREATE OR ALTER VIEW dbo.vw_HR_Workforce_Cleaned
 AS
-WITH ParsedDates AS (
+WITH SourceData AS (
     SELECT
         id,
         gender,
@@ -24,39 +22,80 @@ WITH ParsedDates AS (
         location,
         location_city,
         location_state,
-        COALESCE(
-            TRY_CONVERT(date, NULLIF(LTRIM(RTRIM(CONVERT(varchar(50), birthdate))), ''), 101),
-            TRY_CONVERT(date, NULLIF(LTRIM(RTRIM(CONVERT(varchar(50), birthdate))), ''), 110)
-        ) AS birth_date,
-        COALESCE(
-            TRY_CONVERT(date, NULLIF(LTRIM(RTRIM(CONVERT(varchar(50), hire_date))), ''), 101),
-            TRY_CONVERT(date, NULLIF(LTRIM(RTRIM(CONVERT(varchar(50), hire_date))), ''), 110)
-        ) AS hire_date_clean,
-        TRY_CONVERT(date, LEFT(NULLIF(LTRIM(RTRIM(CONVERT(varchar(50), termdate))), ''), 10), 23)
-            AS termination_date
+        NULLIF(LTRIM(RTRIM(
+            CONVERT(varchar(50), birthdate)
+        )), '') AS raw_birth_date,
+        NULLIF(LTRIM(RTRIM(
+            CONVERT(varchar(50), hire_date)
+        )), '') AS raw_hire_date,
+        NULLIF(LTRIM(RTRIM(
+            CONVERT(varchar(50), termdate)
+        )), '') AS raw_term_date
     FROM [HR Data]
 ),
+ParsedDates AS (
+    SELECT
+        *,
+        COALESCE(
+            TRY_CONVERT(date, raw_birth_date, 101),
+            TRY_CONVERT(date, raw_birth_date, 110)
+        ) AS birth_date,
+        COALESCE(
+            TRY_CONVERT(date, raw_hire_date, 101),
+            TRY_CONVERT(date, raw_hire_date, 110)
+        ) AS hire_date_clean,
+        TRY_CONVERT(
+            date,
+            LEFT(raw_term_date, 10),
+            23
+        ) AS termination_date
+    FROM SourceData
+),
 Classified AS (
-    SELECT *,
+    SELECT
+        *,
         CAST('2026-10-30' AS date) AS as_of_date,
         CASE
-            WHEN termination_date IS NULL THEN 'Active'
-            WHEN termination_date > CAST('2026-10-30' AS date) THEN 'Pending Termination'
+            WHEN raw_term_date IS NULL
+                THEN 'Active'
+            WHEN termination_date IS NULL
+                THEN 'Unknown'
+            WHEN termination_date > CAST('2026-10-30' AS date)
+                THEN 'Pending Termination'
             ELSE 'Terminated'
-        END AS employee_status,
-        CASE
-            WHEN birth_date IS NULL THEN NULL
-            ELSE DATEDIFF(year, birth_date, CAST('2026-10-30' AS date))
-                 - CASE WHEN DATEADD(year,
-                     DATEDIFF(year, birth_date, CAST('2026-10-30' AS date)),
-                     birth_date) > CAST('2026-10-30' AS date)
-                   THEN 1 ELSE 0 END
-        END AS age
+        END AS employee_status
     FROM ParsedDates
 )
-SELECT id, gender, race, department, jobtitle, location,
-       location_city, location_state, birth_date, hire_date_clean,
-       termination_date, employee_status, age, as_of_date
+SELECT
+    id,
+    gender,
+    race,
+    department,
+    jobtitle,
+    location,
+    location_city,
+    location_state,
+    birth_date,
+    hire_date_clean,
+    termination_date,
+    employee_status,
+    CASE
+        WHEN birth_date IS NULL
+          OR birth_date > as_of_date
+            THEN NULL
+        ELSE
+            DATEDIFF(YEAR, birth_date, as_of_date)
+            -
+            CASE
+                WHEN DATEADD(
+                    YEAR,
+                    DATEDIFF(YEAR, birth_date, as_of_date),
+                    birth_date
+                ) > as_of_date
+                THEN 1 ELSE 0
+            END
+    END AS age,
+    as_of_date
 FROM Classified;
 GO
 
