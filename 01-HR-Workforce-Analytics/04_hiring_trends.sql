@@ -4,6 +4,7 @@ SELECT
     COUNT(*) AS [Employees Hired]
 FROM dbo.vw_HR_Workforce_Cleaned
 WHERE hire_date_clean IS NOT NULL
+  AND hire_date_clean <= as_of_date
 GROUP BY YEAR(hire_date_clean)
 ORDER BY [Year];
 
@@ -27,6 +28,7 @@ WITH WorkforceChanges AS (
         0 AS [Employees Terminated]
     FROM dbo.vw_HR_Workforce_Cleaned
     WHERE hire_date_clean IS NOT NULL
+  AND hire_date_clean <= as_of_date
     GROUP BY YEAR(hire_date_clean)
 
     UNION ALL
@@ -59,6 +61,7 @@ WITH WorkforceChanges AS (
         0 AS [Employees Terminated]
     FROM dbo.vw_HR_Workforce_Cleaned
     WHERE hire_date_clean IS NOT NULL
+  AND hire_date_clean <= as_of_date
     GROUP BY YEAR(hire_date_clean)
 
     UNION ALL
@@ -97,25 +100,46 @@ ORDER BY [Year];
 
 -- 5. Employee age at hiring
 WITH HiringAge AS (
- SELECT id, hire_date_clean, birth_date,
- DATEDIFF(YEAR, birth_date, hire_date_clean) -
- CASE WHEN DATEADD(YEAR, DATEDIFF(YEAR, birth_date, hire_date_clean), birth_date)
- > hire_date_clean THEN 1 ELSE 0 END AS age_at_hire
- FROM dbo.vw_HR_Workforce_Cleaned
- WHERE birth_date IS NOT NULL AND hire_date_clean IS NOT NULL
- AND hire_date_clean >= birth_date
+    SELECT
+        id,
+        hire_date_clean,
+        birth_date,
+        DATEDIFF(YEAR, birth_date, hire_date_clean)
+        -
+        CASE
+            WHEN DATEADD(
+                YEAR,
+                DATEDIFF(YEAR, birth_date, hire_date_clean),
+                birth_date
+            ) > hire_date_clean
+            THEN 1 ELSE 0
+        END AS age_at_hire
+    FROM dbo.vw_HR_Workforce_Cleaned
+    WHERE birth_date IS NOT NULL
+      AND hire_date_clean IS NOT NULL
+      AND hire_date_clean >= birth_date
+      AND hire_date_clean <= as_of_date
 ),
 HiringAgeGroups AS (
- SELECT CASE
- WHEN age_at_hire BETWEEN 18 AND 24 THEN '18-24'
- WHEN age_at_hire BETWEEN 25 AND 34 THEN '25-34'
- WHEN age_at_hire BETWEEN 35 AND 44 THEN '35-44'
- WHEN age_at_hire BETWEEN 45 AND 54 THEN '45-54'
- ELSE '55+' END AS [Age Group at Hire]
- FROM HiringAge WHERE age_at_hire >= 18
+    SELECT
+        CASE
+            WHEN age_at_hire BETWEEN 18 AND 24 THEN '18-24'
+            WHEN age_at_hire BETWEEN 25 AND 34 THEN '25-34'
+            WHEN age_at_hire BETWEEN 35 AND 44 THEN '35-44'
+            WHEN age_at_hire BETWEEN 45 AND 54 THEN '45-54'
+            ELSE '55+'
+        END AS [Age Group at Hire]
+    FROM HiringAge
+    WHERE age_at_hire >= 18
 )
-SELECT [Age Group at Hire], COUNT(*) AS [Employees Hired],
- CAST(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER () AS DECIMAL(5,2)) AS [Percentage (%)]
+SELECT
+    [Age Group at Hire],
+    COUNT(*) AS [Employees Hired],
+    CAST(
+        COUNT(*) * 100.0 /
+        SUM(COUNT(*)) OVER ()
+        AS DECIMAL(5,2)
+    ) AS [Percentage (%)]
 FROM HiringAgeGroups
 GROUP BY [Age Group at Hire]
 ORDER BY [Employees Hired] DESC;
