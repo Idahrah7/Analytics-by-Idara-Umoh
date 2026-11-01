@@ -119,3 +119,97 @@ SELECT [Age Group at Hire], COUNT(*) AS [Employees Hired],
 FROM HiringAgeGroups
 GROUP BY [Age Group at Hire]
 ORDER BY [Employees Hired] DESC;
+
+-- 6. Annual hiring by department
+SELECT
+    YEAR(hire_date_clean) AS [Year],
+    department AS [Department],
+    COUNT(*) AS [Employees Hired]
+FROM dbo.vw_HR_Workforce_Cleaned
+WHERE hire_date_clean IS NOT NULL
+  AND hire_date_clean <= as_of_date
+GROUP BY
+    YEAR(hire_date_clean),
+    department
+ORDER BY
+    [Year],
+    [Employees Hired] DESC;
+
+
+-- 7. Annual employee departures by department
+SELECT
+    YEAR(termination_date) AS [Year],
+    department AS [Department],
+    COUNT(*) AS [Employees Terminated]
+FROM dbo.vw_HR_Workforce_Cleaned
+WHERE employee_status = 'Terminated'
+  AND termination_date IS NOT NULL
+GROUP BY
+    YEAR(termination_date),
+    department
+ORDER BY
+    [Year],
+    [Employees Terminated] DESC;
+
+
+-- 8. Annual net workforce change by department
+WITH WorkforceChanges AS (
+    SELECT
+        YEAR(hire_date_clean) AS [Year],
+        department AS [Department],
+        COUNT(*) AS [Employees Hired],
+        0 AS [Employees Terminated]
+    FROM dbo.vw_HR_Workforce_Cleaned
+    WHERE hire_date_clean IS NOT NULL
+      AND hire_date_clean <= as_of_date
+    GROUP BY
+        YEAR(hire_date_clean),
+        department
+
+    UNION ALL
+
+    SELECT
+        YEAR(termination_date) AS [Year],
+        department AS [Department],
+        0 AS [Employees Hired],
+        COUNT(*) AS [Employees Terminated]
+    FROM dbo.vw_HR_Workforce_Cleaned
+    WHERE employee_status = 'Terminated'
+      AND termination_date IS NOT NULL
+    GROUP BY
+        YEAR(termination_date),
+        department
+),
+AnnualSummary AS (
+    SELECT
+        [Year],
+        [Department],
+        SUM([Employees Hired]) AS [Total Hired],
+        SUM([Employees Terminated]) AS [Total Terminated]
+    FROM WorkforceChanges
+    GROUP BY
+        [Year],
+        [Department]
+)
+SELECT
+    [Year],
+    [Department],
+    [Total Hired],
+    [Total Terminated],
+
+    [Total Hired] - [Total Terminated]
+        AS [Net Workforce Change],
+
+    SUM(
+        [Total Hired] - [Total Terminated]
+    ) OVER (
+        PARTITION BY [Department]
+        ORDER BY [Year]
+        ROWS BETWEEN UNBOUNDED PRECEDING
+        AND CURRENT ROW
+    ) AS [Cumulative Department Growth]
+
+FROM AnnualSummary
+ORDER BY
+    [Department],
+    [Year];
