@@ -10,14 +10,23 @@ This project uses SQL to clean and analyze HR records and Power BI to present th
 
 ## Power BI Dashboard
 
-The report has two pages:
+Explore the completed two-page Power BI report, combining workforce trends with employee demographics, work locations, and tenure.
 
-- **HR Workforce Overview:** Workforce KPIs, employee status, department size, historical former-employee proportions by department, annual hiring, and annual departures.
-- **Employee Insights:** Employee demographics, remote and headquarters staffing by department, former-employee tenure distribution, and historical departure proportions by gender.
+### Page 1 — HR Workforce Overview
 
-**Interactivity:** Department and Gender slicers are synchronized across the report pages.
+Workforce KPIs, employee status, department distribution, historical departure proportions, annual hiring, and departures.
 
-Dashboard screenshots and the editable `.pbix` file will be linked here once they have been uploaded to the repository.
+![HR Workforce Overview](screenshots/hr-workforce-overview.png)
+
+### Page 2 — Employee Insights
+
+Employee demographics, remote and headquarters staffing by department, former-employee tenure distribution, and historical departure proportions by gender.
+
+![Employee Insights](screenshots/employee-insights.png)
+
+**Interactivity:** Department and Gender slicers are synchronized across both report pages.
+
+**[Download the Power BI report (.pbix)](HR_Workforce_Analytics.pbix)**
 
 ## Key Metrics
 
