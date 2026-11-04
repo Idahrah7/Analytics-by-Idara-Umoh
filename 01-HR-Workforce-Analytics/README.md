@@ -23,7 +23,8 @@ Workforce KPIs, employee status, department distribution, historical departure p
 
 Employee demographics, remote and headquarters staffing by department, former-employee tenure distribution, and historical departure proportions by gender.
 
-![Employee Insights](screenshots/employee-insights.png)
+<img width="1157" height="775" alt="image" src="https://github.com/user-attachments/assets/68010414-e031-46f4-91cd-0defa676dc17" />
+
 
 **Interactivity:** Department and Gender slicers are synchronized across both report pages.
 
