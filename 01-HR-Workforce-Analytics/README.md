@@ -16,7 +16,8 @@ Explore the completed two-page Power BI report, combining workforce trends with 
 
 Workforce KPIs, employee status, department distribution, historical departure proportions, annual hiring, and departures.
 
-![HR Workforce Overview](screenshots/hr-workforce-overview.png)
+<img width="1097" height="773" alt="image" src="https://github.com/user-attachments/assets/25dc365f-7ca5-44de-abc4-e5d32aee2838" />
+
 
 ### Page 2 — Employee Insights
 
