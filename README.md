@@ -20,7 +20,7 @@ I enjoy working through the entire analytical process—from understanding a pro
 
 ## Featured Projects
 
-### 1. [HR Workforce Analytics | SQL Server & Power BI](01-HR-Workforce-Analytics/README.md)
+### 1. [HR Workforce Analytics | SQL Server & Power BI](01 HR Workforce Analytics/README.md)
 
 An end-to-end analysis of **22,214 employee records**, using SQL Server for data cleaning and exploratory analysis and Power BI for interactive reporting.
 
@@ -30,7 +30,7 @@ An end-to-end analysis of **22,214 employee records**, using SQL Server for data
 
 ![HR Workforce Analytics Dashboard](https://github.com/user-attachments/assets/25dc365f-7ca5-44de-abc4-e5d32aee2838)
 
-**[Explore the full project, SQL scripts, and dashboards](01-HR-Workforce-Analytics/README.md)**
+**[Explore the full project, SQL scripts, and dashboards](01 HR Workforce Analytics/README.md)**
 
 ### 2. Customer Churn & Retention Analysis
 **Excel**
