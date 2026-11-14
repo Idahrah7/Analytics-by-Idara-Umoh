@@ -8,7 +8,7 @@ An interactive Excel dashboard analysing **6,687 telecommunications customers** 
 
 ## 📊 Dashboard Preview
 
-![Customer Churn & Retention Dashboard] <img width="1094" height="720" alt="Customer Churn Dashboard" src="https://github.com/user-attachments/assets/2e4dfa6e-7e66-4b04-9066-2b8d38803dac" />
+[Customer Churn & Retention Dashboard] <img width="1094" height="720" alt="Customer Churn Dashboard" src="https://github.com/user-attachments/assets/2e4dfa6e-7e66-4b04-9066-2b8d38803dac" />
 
 
 *Interactive dashboard featuring churn KPIs, customer segmentation, service analysis, churn reasons, and geographical trends.*
