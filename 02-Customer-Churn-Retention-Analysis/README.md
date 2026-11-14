@@ -38,7 +38,7 @@ The analysis explores three key questions:
 
 **1. Contract Type and Customer Churn**
 
-Month-to-month customers recorded the highest churn rate at **46.29%**, approximately **5 times** the rate for one-year contracts (11.29%) and **17 times** the rate for two-year contracts (2.78%).
+Month-to-month customers recorded the highest churn rate at **46.29%**, approximately **4 times** the rate for one-year contracts (11.29%) and **17 times** the rate for two-year contracts (2.78%).
 
 **2. Customer Service Interactions**
 
