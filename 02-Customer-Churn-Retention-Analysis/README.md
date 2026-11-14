@@ -8,7 +8,7 @@ An interactive Excel dashboard analysing **6,687 telecommunications customers** 
 
 ## 📊 Dashboard Preview
 
-Customer Churn & Retention Dashboard <img width="1094" height="720" alt="Customer Churn Dashboard" src="https://github.com/user-attachments/assets/2e4dfa6e-7e66-4b04-9066-2b8d38803dac" />
+<img width="1094" height="720" alt="Customer Churn & Retention Dashboard" src="https://github.com/user-attachments/assets/2e4dfa6e-7e66-4b04-9066-2b8d38803dac" />
 
 
 *Interactive dashboard featuring churn KPIs, customer segmentation, service analysis, churn reasons, and geographical trends.*
@@ -38,7 +38,7 @@ The analysis explores three key questions:
 
 **1. Contract Type and Customer Churn**
 
-Month-to-month customers recorded the highest churn rate at **46.29%**, compared with **11.29%** for one-year contracts and **2.78%** for two-year contracts.
+Month-to-month customers recorded the highest churn rate at **46.29%**, approximately **4.1 times** the rate for one-year contracts (11.29%) and **16.7 times** the rate for two-year contracts (2.78%).
 
 **2. Customer Service Interactions**
 
@@ -60,8 +60,8 @@ Churn rates varied across states, with **California recording 63.24%**, highligh
 
 ### 1. Data Preparation — Excel
 
-- Reviewed customer records and prepared the data for analysis.
-- Organised customer information for churn analysis.
+- Reviewed the customer-level and aggregate datasets, including churn indicators, contract types, demographics, and service usage.
+- Organised analytical fields and customer segments for PivotTable-based comparisons.
 
 ### 2. Data Analysis — PivotTables & Power Pivot
 
@@ -86,7 +86,7 @@ Churn rates varied across states, with **California recording 63.24%**, highligh
 | File | Description |
 |---|---|
 | [Customer_Churn_Retention_Analysis.xlsx](Customer_Churn_Retention_Analysis.xlsx) | Interactive Excel dashboard, customer data, and supporting analysis |
-| [Dashboard Screenshot](images/customer-churn-dashboard.png) | Full dashboard screenshot |
+| [Dashboard Screenshot](https://github.com/user-attachments/assets/2e4dfa6e-7e66-4b04-9066-2b8d38803dac) | Full dashboard screenshot |
 
 ## ⚠️ Data Limitations
 
