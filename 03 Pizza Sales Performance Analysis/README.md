@@ -1,4 +1,4 @@
-# Pizza Sales Performance Analysis | Excel Dashboard
+# Pizza Sales Performance Analysis | Microsoft Excel
 
 ## Project Overview
 
@@ -34,15 +34,13 @@ Using Microsoft Excel, I prepared and analyzed the sales data, developed PivotTa
 | Average Order Value | $38.31 |
 | Average Pizzas per Order | 2.32 |
 
-*The dashboard displays average pizzas per order as a rounded whole number.*
-
 ## Dashboard
 
 The interactive dashboard provides a consolidated view of sales performance, including monthly revenue trends, weekday and time-of-day performance, best-selling and lowest-revenue pizzas, category and size contributions, and customer order value segments.
 
 Users can explore relevant sales metrics through interactive slicers and timelines.
+<img width="1280" height="712" alt="Pizza_Sales_Dashboard_2015 png" src="https://github.com/user-attachments/assets/4b06d20d-4a1d-466c-a99d-4b7b64f22cbe" />
 
-*Dashboard screenshot to be added.*
 
 ## Key Insights
 
