@@ -1,5 +1,17 @@
 # Pizza Sales Performance Analysis | Microsoft Excel
 
+**Tools:** Microsoft Excel • Power Query • PivotTables • PivotCharts • Slicers • Timelines
+
+---
+
+## 📊 Dashboard Preview
+
+<img width="1280" alt="Pizza Sales Performance Dashboard (2015)" src="https://github.com/user-attachments/assets/4b06d20d-4a1d-466c-a99d-4b7b64f22cbe" />
+
+The interactive dashboard highlights revenue trends, product performance, and customer order-value segments, with slicers and timelines for exploration.
+
+---
+
 ## Project Overview
 
 This project analyzes pizza sales transactions from 2015 to evaluate revenue performance, customer purchasing patterns, product popularity, and order value distribution.
@@ -33,14 +45,6 @@ Using Microsoft Excel, I prepared and analyzed the sales data, developed PivotTa
 | Total Pizzas Sold | 49,574 |
 | Average Order Value | $38.31 |
 | Average Pizzas per Order | 2.32 |
-
-## Dashboard
-
-The interactive dashboard provides a consolidated view of sales performance, including monthly revenue trends, weekday and time-of-day performance, best-selling and lowest-revenue pizzas, category and size contributions, and customer order value segments.
-
-Users can explore relevant sales metrics through interactive slicers and timelines.
-<img width="1280" height="712" alt="Pizza_Sales_Dashboard_2015 png" src="https://github.com/user-attachments/assets/4b06d20d-4a1d-466c-a99d-4b7b64f22cbe" />
-
 
 ## Key Insights
 
