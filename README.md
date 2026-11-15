@@ -37,10 +37,13 @@ An end-to-end analysis of **22,214 employee records**, using SQL Server for data
 
 Investigated customer churn patterns through PivotTables and visualizations to understand customer retention challenges.
 
-### 3. Sales & Profitability Dashboard
-**Excel**
+### 3. [Pizza Sales Performance Analysis | Excel](03 Pizza Sales Performance Analysis/README.md)
 
-Explored sales performance, regional profitability, and business trends through dashboard reporting.
+Analyzed **21,350 orders** and **$817,860.05 in annual revenue** through an interactive Excel dashboard, exploring monthly trends, product performance, and customer spending segments.
+
+**Tools:** Excel · Power Query · PivotTables · PivotCharts · Slicers
+
+**[Explore the full project](03 Pizza Sales Performance Analysis/README.md)**
 
 ### 4. [Customer Segmentation Analysis](https://github.com/Idahrah7/M4ace-Data-analysis/blob/main/Customer_Segmetation_Project_IdaraUmoh.pbix)
 **Power BI**
