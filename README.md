@@ -43,7 +43,9 @@ Analyzed **21,350 orders** and **$817,860.05 in annual revenue** through an inte
 
 **Tools:** Excel · Power Query · PivotTables · PivotCharts · Slicers
 
-**[Explore the full project](03 Pizza Sales Performance Analysis/README.md)**
+![Pizza Sales Performance Dashboard (2015)](https://github.com/user-attachments/assets/4b06d20d-4a1d-466c-a99d-4b7b64f22cbe)
+
+**[Explore the full project and dashboard](03 Pizza Sales Performance Analysis/README.md)**
 
 ### 4. [Customer Segmentation Analysis](https://github.com/Idahrah7/M4ace-Data-analysis/blob/main/Customer_Segmetation_Project_IdaraUmoh.pbix)
 **Power BI**
