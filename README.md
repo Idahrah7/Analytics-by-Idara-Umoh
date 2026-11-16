@@ -14,53 +14,77 @@ I enjoy working through the entire analytical process—from understanding a pro
 
 | Tool | Skills |
 | --- | --- |
-|  **Excel** | Power Query, PivotTables, PivotCharts, dashboards, forecasting, lookup functions |
+|  **Excel** | Power Query, Power Pivot, PivotTables, PivotCharts, formulas, dashboards |
 | **SQL Server** | Data cleaning, joins, CTEs, window functions, aggregations |
-| **Power BI** | Data modelling, interactive dashboards, visualization, reporting |
+| **Power BI** | Data modelling, DAX, interactive dashboards, reporting |
 
 ## Featured Projects
 
-### 1. [HR Workforce Analytics | SQL Server & Power BI](01 HR Workforce Analytics/README.md)
+### 01 — [HR Workforce Analytics](01%20HR%20Workforce%20Analytics/README.md)
 
-An end-to-end analysis of **22,214 employee records**, using SQL Server for data cleaning and exploratory analysis and Power BI for interactive reporting.
+**SQL Server • Power BI • DAX**
 
-**Highlights:** Analyzed workforce distribution across 13 departments, employee departures, tenure, demographics, and hiring trends. Built a two-page interactive dashboard using DAX measures and synchronized slicers.
+Analyzed **22,214 employee records** to explore workforce composition, employee departures, demographics, tenure, and historical hiring trends.
 
-**Tools:** SQL Server · Power BI · DAX
+Developed a two-page Power BI dashboard with synchronized filters for workforce reporting.
 
 ![HR Workforce Analytics Dashboard](https://github.com/user-attachments/assets/25dc365f-7ca5-44de-abc4-e5d32aee2838)
 
-**[Explore the full project, SQL scripts, and dashboards](01 HR Workforce Analytics/README.md)**
+**[View project, SQL scripts and dashboards](01%20HR%20Workforce%20Analytics/README.md)**
 
-### 2. Customer Churn & Retention Analysis
-**Excel**
+---
 
-Investigated customer churn patterns through PivotTables and visualizations to understand customer retention challenges.
+### 02 — [Customer Churn & Retention Analysis](02%20Customer%20Churn%20Retention%20Analysis/README.md)
 
-### 3. [Pizza Sales Performance Analysis | Excel](03 Pizza Sales Performance Analysis/README.md)
+**Microsoft Excel • Power Pivot • DAX**
 
-Analyzed **21,350 orders** and **$817,860.05 in annual revenue** through an interactive Excel dashboard, exploring monthly trends, product performance, and customer spending segments.
+Analyzed **6,687 telecommunications customers** to identify churn patterns, high-risk customer segments, and opportunities to improve retention.
 
-**Tools:** Excel · Power Query · PivotTables · PivotCharts · Slicers
+**Key metrics:** 26.86% churn rate • 1,796 churned customers
+
+![Customer Churn & Retention Dashboard](https://github.com/user-attachments/assets/2e4dfa6e-7e66-4b04-9066-2b8d38803dac)
+
+**[View project, Excel workbook and dashboard](02%20Customer%20Churn%20Retention%20Analysis/README.md)**
+
+---
+
+### 03 — [Pizza Sales Performance Analysis](03%20Pizza%20Sales%20Performance%20Analysis/README.md)
+
+**Microsoft Excel • Power Query • PivotTables**
+
+Analyzed **21,350 orders** generating **$817,860.05** in annual revenue to identify peak sales periods, product performance, and customer spending patterns.
+
+Built an interactive Excel dashboard with KPI cards, sales trends, product comparisons, and slicers.
 
 ![Pizza Sales Performance Dashboard (2015)](https://github.com/user-attachments/assets/4b06d20d-4a1d-466c-a99d-4b7b64f22cbe)
 
-**[Explore the full project and dashboard](03 Pizza Sales Performance Analysis/README.md)**
+**[View project and interactive dashboard](03%20Pizza%20Sales%20Performance%20Analysis/README.md)**
 
-### 4. [Customer Segmentation Analysis](https://github.com/Idahrah7/M4ace-Data-analysis/blob/main/Customer_Segmetation_Project_IdaraUmoh.pbix)
+---
+
+### 04 — [Customer Segmentation Analysis](https://github.com/Idahrah7/M4ace-Data-analysis/blob/main/Customer_Segmetation_Project_IdaraUmoh.pbix)
+
 **Power BI**
 
 Developed a Power BI report exploring customer segments and patterns in customer data.
 
-### 5. Healthcare Survey & Product Insights — Ceeravo
-**Excel · Survey Research · Data Visualization**
+**[View Power BI project](https://github.com/Idahrah7/M4ace-Data-analysis/blob/main/Customer_Segmetation_Project_IdaraUmoh.pbix)**
 
-Analyzed 177 survey responses to investigate emergency healthcare challenges, patient preferences, and interest in a proposed hospital-matching platform. The findings contributed to product research and planning.
+---
 
-### 6. Financial Risk & Loan Portfolio Analysis
-**SQL · Power BI · Planned**
+### 05 — Healthcare Survey & Product Insights — Ceeravo
 
-Planned analysis of publicly available lending data to investigate repayment behaviour, delinquency, default rates, and financial risk across borrower segments.
+**Excel • Survey Research • Data Visualization**
+
+Analyzed **177 survey responses** to investigate emergency healthcare challenges, patient preferences, and interest in a hospital-matching platform. Findings contributed to product research and planning.
+
+---
+
+### 06 — Financial Risk & Loan Portfolio Analysis
+
+**SQL Server • Power BI • Planned**
+
+Planned analysis of lending data to investigate repayment behaviour, delinquency, default rates, and credit risk across borrower segments.
 
 ## Professional Training
 
